@@ -1,3 +1,3 @@
 # README.md
-# 세번째로 작성하는 README.md
-# 파일을 추가커밋합니다.
+# 소스트리를 이용한 README.md
+# 소스트리를 이용하여 push 하기
