@@ -30,7 +30,7 @@
 		String address3 = request.getParameter("address3");
       
 		//DB 연결
-      	Connection conn = null;
+      		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
