@@ -1,99 +1,88 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*"%>
 <%
 	if(session.getAttribute("userid") == null) {
 %>
-	<!-- 로그인이 되어있지 않으면 로그인을 실행하라며 해당 페이지로 돌아감 -->
 	<script>
 		alert('로그인 후 이용하세요');
-		location.href = './login.jsp';
+		location.href='./login.jsp';
 	</script>
 <%
 	} else {
-		// 로그인 세션 체크 (info.jsp처럼 로그인 안한 사용자가 들어오면 안됨)
-		// info.jsp로부터 데이터를 전달 받음
-		// DB연결
-		// 비밀번호가 맞는지 여부 체크 (select를 해봐야 함)
-		// update문 실행
-		// info.jsp로 이동하여 제대로 바뀌었는지 아닌지 확인
-		// 과제는 23일 밤 11시 59분까지 깃허브에 올리기...
-		
+		// info.jsp로 부터 데이터를 전달 받음.
+		request.setCharacterEncoding("UTF-8");
 		String userid = (String)session.getAttribute("userid");
 		String userpw = request.getParameter("userpw");
 		String username = request.getParameter("username");
-		String mem_hp = request.getParameter("mem_hp");
-		String mem_email = request.getParameter("mem_email");
-		String mem_hobby[] = request.getParameterValues("mem_hobby");
+		String hp = request.getParameter("hp");
+		String email = request.getParameter("email");      
+		String hobby[] = request.getParameterValues("hobby");
 		String hobbystr = "";
-		for(int i=0; i<mem_hobby.length; i++) {
-			hobbystr = hobbystr + mem_hobby[i] + " ";
+		for(int i=0; i<hobby.length; i++){
+			hobbystr = hobbystr + hobby[i] + " ";
 		}
-		String mem_ssn1 = request.getParameter("mem_ssn1");
-		String mem_ssn2 = request.getParameter("mem_ssn2");
-		String mem_zipcode = request.getParameter("mem_zipcode");
-		String mem_address1 = request.getParameter("mem_address1");
-		String mem_address2 = request.getParameter("mem_address2");
-		String mem_address3 = request.getParameter("mem_address3");
-		
-		Connection conn = null;
+		String ssn1 = request.getParameter("ssn1");
+		String ssn2 = request.getParameter("ssn2");
+		String zipcode = request.getParameter("zipcode");
+		String address1 = request.getParameter("address1");
+		String address2 = request.getParameter("address2");
+		String address3 = request.getParameter("address3");
+      
+		//DB 연결
+      	Connection conn = null;
 		PreparedStatement pstmt = null;
-		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
-		
+
 		String sql = "";
 		String url = "jdbc:mysql://localhost:3306/jspstudy";
 		String uid = "root";
 		String upw = "1234";
-			
-		try {
+         
+		try{
 			Class.forName("com.mysql.jdbc.Driver"); // com.mysql.cj.jdbc.Driver
 			conn = DriverManager.getConnection(url, uid, upw);
-			if(conn != null) {
-				sql = "SELECT mem_userpw FROM tb_member WHERE mem_userid=?";
+			if (conn != null) {
+				// 비밀번호가 맞는지 체크
+				sql = "select mem_idx from tb_member where mem_userid=? and mem_userpw=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, userid);
-				// rs = pstmt.executeUpdate();
+				pstmt.setString(2, userpw);
+				rs = pstmt.executeQuery();
 				
-				if (rs.next()) { // id가 있을 때
-					String dbPass = rs.getString("userpw");
-					if (userpw.equals(dbPass)) { // 비밀번호가 맞을 경우 수정
-						sql = "UPDATE tb_member SET mem_name=?, mem_hp=?, mem_email=?, mem_ssn1=?, mem_ssn2=?, mem_zipcode=?, mem_address1=?, mem_address2=?, mem_address3=? WHERE mem_userid=?";
-						pstmt2 = conn.prepareStatement(sql);
-						
-						pstmt.setString(1, username);
-						pstmt.setString(2, mem_hp);
-						pstmt.setString(3, mem_email);
-						pstmt.setString(4, hobbystr);
-						pstmt.setString(5, mem_ssn1);
-						pstmt.setString(6, mem_ssn2);
-						pstmt.setString(7, mem_zipcode);
-						pstmt.setString(8, mem_address1);
-						pstmt.setString(9, mem_address2);
-						pstmt.setString(10, mem_address3);
-						pstmt.setString(11, userid);
-					
-						// 4단계 실행
-						pstmt.executeUpdate();
+				if (rs.next()) {   // 비밀번호가 맞을 경우
+					sql = "update tb_member set mem_name=?, mem_hp=?, mem_email=?, mem_hobby=?, mem_ssn1=?, mem_ssn2=?, mem_zipcode=?, mem_address1=?, mem_address2=?, mem_address3=? where mem_userid=?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1,username);
+					pstmt.setString(2,hp);
+					pstmt.setString(3,email);
+					pstmt.setString(4,hobbystr);
+					pstmt.setString(5,ssn1);
+					pstmt.setString(6,ssn2);
+					pstmt.setString(7,zipcode);
+					pstmt.setString(8,address1);
+					pstmt.setString(9,address2);
+					pstmt.setString(10,address3);
+					pstmt.setString(11, userid);
+					pstmt.executeUpdate();
 %>
-						<script>
-							alert('정보가 수정되었습니다.');
-							location.href = 'info.jsp';
-						</script>
-<%
-					} else {
+					<script>
+						alert('회원정보가 수정되었습니다.');
+						location.href='./info.jsp';
+					</script>
+<%                  
+                  
+				} else {   // 비밀번호가 틀릴 경우
 %>
-						<script>
-							alert('비밀번호를 확인하세요.');
-							history.back();
-						</script>
+					<script>
+						alert('비밀번호를 확인하세요');
+						history.back();
+					</script>
 <%
-					}
-				} else {
-					out.println("ID가 존재하지 않습니다.");
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally { }
+		}
+	}
 %>
