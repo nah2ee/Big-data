@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- xml파일은 최상단 선언부 문구가 매우 중요함 -->
+<!-- xml : 사용자 정의 태그. 데이터를 주고받거나 어떤 값을 프로그램 혹은 다른 곳에서 읽어갈 수 있도록 태그를 만드는 것 -->
+<configuration>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+      	<!-- mySql DB 연결 -->
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/jspstudy"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1234"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/koreait/db/member.xml"/>
+  </mappers>
+</configuration>

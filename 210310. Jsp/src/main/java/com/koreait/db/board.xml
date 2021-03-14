@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Board">
+	<insert id="upload" parameterType="map">
+		INSERT INTO tb_board(b_userid, b_name, b_title, b_content) VALUES (#{b_userid}, #{b_name}, #{b_title}, #{b_content})
+	</insert>
+	
+	<select id="totalCount" resultType="int">
+		SELECT count(b_idx) FROM tb_board
+	</select>
+	
+	<!-- 
+	<select id="selectList" parameterType="map" resultType="map">
+		SELECT * FROM tb_board limit #{start}, #{pagePerCount}
+	</select>
+	-->
+	
+	<select id="listDao" resultType="com.koreait.board.BoardDTO">
+        SELECT * FROM tb_board ORDER BY b_idx DESC
+    </select>
+    
+    <select id="selectBoardList" parameterType="com.koreait.board.BoardDTO" resultType="com.koreait.board.BoardDTO">
+        SELECT * FROM tb_board
+    </select>
+    
+    <!-- <insert id="insertBoard">
+        INSERT INTO board(b_userid, b_name, b_title, b_hit, b_up, b_content) VALUES (#{b_userid}, #{b_name}, #{b_title}, #{b_hit}, #{b_up}, #{b_content})
+    </insert> -->
+    
+    <update id="updateBoard">
+        UPDATE BOARD SET title = #{title}, content = #{content}, writer = #{writer}, reg_datetime = now() WHERE code = #{code}
+    </update>
+    
+    <delete id="deleteBoard">
+        DELETE FROM tb_board WHERE code = #{code}
+    </delete>
+    
+    <select id="selectBoardByCode" parameterType="com.koreait.board.BoardDTO" resultType="com.koreait.board.BoardDTO">
+        SELECT * FROM tB_board WHERE code = #{code}
+    </select>
+</mapper>
