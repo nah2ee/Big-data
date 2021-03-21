@@ -11,4 +11,4 @@ CREATE TABLE tb_store (
 SELECT * FROM tb_store;
 DROP TABLE tb_store;
 
-INSERT INTO tb_store(sto_name, sto_address) VALUES ("사과점", "서울시 강남구");
+INSERT INTO tb_store(sto_name, sto_address) VALUES ("사과점", "서울시 강남구"); -- 테스트 구문
