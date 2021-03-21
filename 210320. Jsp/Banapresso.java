@@ -49,19 +49,15 @@ public class Banapresso {
 
 					if (conn != null) {
 						sql = "insert into tb_store(sto_name, sto_address) values (?, ?)";
-
 						pstmt = conn.prepareStatement(sql);
 
-//						for (WebElement st : store) { sto_name = st.getText(); System.out.println(sto_name); pstmt.setString(1, sto_name); }
-
-//						for (WebElement ad : address) { sto_address = ad.getText(); System.out.println(sto_address); pstmt.setString(2, sto_address); }
-
 						for (int i = 0; i <= store.size(); i++) {
-							sto_name = store.get(i).getText(); // st
-							sto_address = address.get(i).getText(); // ad
+							sto_name = store.get(i).getText();
+							sto_address = address.get(i).getText();
+							// 리스트(배열)에 저장되어 있는 것을 한줄씩 출력
 
-							System.out.println(sto_name);
-							pstmt.setString(1, sto_name);
+							System.out.println(sto_name); // 출력
+							pstmt.setString(1, sto_name); // DB에 저장
 							System.out.println(sto_address);
 							pstmt.setString(2, sto_address);
 							pstmt.executeUpdate();
