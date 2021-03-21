@@ -42,27 +42,30 @@ public class Banapresso {
 			while (true) {
 				List<WebElement> store = driver.findElements(By.cssSelector(".store_name_map > i")); // 지점명 리스트 저장
 				List<WebElement> address = driver.findElements(By.cssSelector(".store_name_map > i + span")); // 주소 리스트 저장
-				
+
 				try {
-					for (WebElement st : store) {
-						sto_name = st.getText();
-						System.out.println(sto_name);
-					}
-					
-					for (WebElement ad : address) {
-						sto_address = ad.getText();
-						System.out.println(sto_address);
-					}
-					
-					// ===== 왜 안올라가 =====
 					Class.forName("com.mysql.jdbc.Driver");
 					conn = DriverManager.getConnection(url, uid, upw);
+
 					if (conn != null) {
 						sql = "insert into tb_store(sto_name, sto_address) values (?, ?)";
+
 						pstmt = conn.prepareStatement(sql);
-						pstmt.setString(1, sto_name);
-						pstmt.setString(2, sto_address);
-						pstmt.executeUpdate();
+
+//						for (WebElement st : store) { sto_name = st.getText(); System.out.println(sto_name); pstmt.setString(1, sto_name); }
+
+//						for (WebElement ad : address) { sto_address = ad.getText(); System.out.println(sto_address); pstmt.setString(2, sto_address); }
+
+						for (int i = 0; i <= store.size(); i++) {
+							sto_name = store.get(i).getText(); // st
+							sto_address = address.get(i).getText(); // ad
+
+							System.out.println(sto_name);
+							pstmt.setString(1, sto_name);
+							System.out.println(sto_address);
+							pstmt.setString(2, sto_address);
+							pstmt.executeUpdate();
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
